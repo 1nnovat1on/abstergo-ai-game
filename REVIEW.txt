@@ -11,7 +11,7 @@ Bootstrap thread
 Reflection thread
 -----------------
 1. Package the system prompt (`archon/prompts/system_prompt.json`) and snapshot into a JSON payload.
-2. Send it to `archon.cognition.llm.call_archon`, which normally invokes `ollama run deepseek-r1`.
+2. Send it to `archon.cognition.llm.call_archon`, which posts to the Ollama Cloud `deepseek-r1:latest` endpoint.
 3. Log whatever response arrives (or the failure) into the `interactions` table.
 
 Application thread
