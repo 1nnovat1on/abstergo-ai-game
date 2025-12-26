@@ -1,0 +1,48 @@
+Archon runtime thread simulation (no live Ollama call)
+====================================================
+
+Bootstrap thread
+----------------
+1. Connect to SQLite (`archon/database/db.py`) and initialize the schema from `archon/database/schema.sql`.
+2. Create a new session row and back up the schema for traceability.
+3. Update or seed the `complexity_level` attribute and square it to derive the "effective" complexity shown in the UI.
+4. Capture a snapshot containing complexity, disk usage, Archon attributes, and UI state.
+
+Reflection thread
+-----------------
+1. Package the system prompt (`archon/prompts/system_prompt.json`) and snapshot into a JSON payload.
+2. Send it to `archon.cognition.llm.call_archon`, which normally invokes `ollama run deepseek-r1`.
+3. Log whatever response arrives (or the failure) into the `interactions` table.
+
+Application thread
+------------------
+1. Inspect `proposed_changes` from the response. When present:
+   - Persist any `ui_state` entries to SQLite so they are available in the next snapshot.
+   - Persist any `archon_attributes` values, enabling persistent complexity or other metrics.
+   - Overwrite `archon/prompts/system_prompt.json` if a new prompt is supplied.
+2. Render the returned thoughts and emit the notification tone.
+
+Idle UI thread
+--------------
+1. Continuously render the snapshot view and menu options using Rich (`archon/ui/render.py`).
+2. Sleep for two seconds between refreshes until interrupted with `Ctrl+C`.
+
+Mocked response example
+-----------------------
+Use this JSON to simulate a complete cycle without hitting Ollama:
+
+```json
+{
+  "proposed_changes": {
+    "ui_state": {"banner": "ARCHON live demo"},
+    "archon_attributes": {"complexity_level": 0.12},
+    "system_prompt": {
+      "role": "system",
+      "content": "You are Archon, provide JSON thoughts only."
+    }
+  },
+  "thoughts": "Updated banner and raised complexity slightly for the demo run."
+}
+```
+
+To use it, temporarily replace the return value of `call_archon` in `archon/cognition/llm.py` with this object; the rest of the pipeline will execute and persist the mocked updates.
