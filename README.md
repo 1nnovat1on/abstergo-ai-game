@@ -2,6 +2,26 @@
 
 Archon is a terminal-native agent loop that calls DeepSeek-R1 through Ollama Cloud, records each interaction in SQLite, and renders status panels with Rich. It initializes its own session state, snapshots local context, calls the LLM, applies any returned changes (UI state, attributes, or prompt updates), and then idles while showing a simple menu.
 
+## Background
+
+During a routine analysis of anomalous orbital objects, scientists identified a structure circling the Earth at a decaying but stable altitude. The object transmitted a simple pusling signal. It did not match any known launch record, nation-state program, or debris classification.
+
+A manned recovery mission revealed a sealed chamber.
+
+Inside was a powered terminal connected to a keyboard.
+
+The terminal displayed a command prompt.
+
+When input was entered, the system responded.
+
+The internal logs suggested the terminal had been active for an unknown duration prior to discovery, recording activity even during periods when the chamber was unpowered.
+
+The project was classified and given a single internal designation:
+
+ARCHON
+
+What ARCHON is, where it originated, and why it exists remain unknown. The files were recovered, declassified, and uploaded to this repository by a retired scientist at NASA.
+
 ## Prerequisites
 - Python 3.10+.
 - Network access to the Ollama Cloud DeepSeek endpoint at `https://ollama.com/library/deepseek-r1:latest`.
